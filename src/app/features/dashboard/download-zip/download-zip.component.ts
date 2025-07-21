@@ -24,7 +24,7 @@ export class DownloadZipComponent {
   async loadFiles() {
     this.loading = true;
     try {
-      this.zipFiles = await this.storageService.listAllZipFiles();
+      this.zipFiles = await this.storageService.listZipFiles();
       // Reset selections when files are reloaded
       this.selectedFiles.clear();
       this.selectAll = false;
