@@ -1,0 +1,231 @@
+<div class="equipments-container">
+  <!-- Header -->
+  <header class="equipments-header">
+    <img src="jd.png" alt="JD" />
+    <h1>Gestão de Equipamentos</h1>
+    <img src="LargestGreenest.jpg" alt="Bracell" />
+  </header>
+
+  <!-- Navigation Button -->
+  <div class="navigation-section">
+    <button class="back-button" routerLink="/dashboard">
+      <span class="button-icon">🏠</span>
+      Voltar ao Dashboard
+    </button>
+  </div>
+
+  <!-- Stats Summary -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">🚜</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ equipments.length }}</div>
+        <div class="stat-label">Total de Equipamentos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🏭</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getUniqueManufacturers() }}</div>
+        <div class="stat-label">Fabricantes</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getAverageYear() }}</div>
+        <div class="stat-label">Ano Médio</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔧</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getUniqueTypes() }}</div>
+        <div class="stat-label">Tipos de Equipamento</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-card">
+      <div class="loading-spinner">🔄</div>
+      <h3>Carregando Equipamentos...</h3>
+      <p>Buscando dados dos equipamentos no sistema...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container">
+    <div class="error-card">
+      <div class="error-icon">⚠️</div>
+      <h3>Erro ao Carregar Dados</h3>
+      <p>{{ error }}</p>
+      <button class="retry-button" (click)="ngOnInit()">
+        <span class="button-icon">🔄</span>
+        Tentar Novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="content-section">
+    <!-- Search and Filter Bar -->
+    <div class="search-section">
+      <div class="search-card">
+        <div class="search-header">
+          <h3>� Buscar Equipamentos</h3>
+        </div>
+        <div class="search-controls">
+          <div class="search-input-group">
+            <input 
+              type="text" 
+              [(ngModel)]="filterTerm" 
+              (input)="filterEquipments()" 
+              placeholder="Digite nome, modelo, ano, série..."
+              class="search-input"
+            >
+            <button class="clear-search" *ngIf="filterTerm" (click)="clearSearch()">
+              ❌
+            </button>
+          </div>
+          <div class="search-stats">
+            <span *ngIf="filterTerm">
+              📊 {{ dataSource.filteredData.length }} de {{ equipments.length }} equipamentos
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Equipment Table -->
+    <div class="table-section">
+      <div class="table-card">
+        <div class="table-header">
+          <h3>📋 Lista de Equipamentos</h3>
+          <div class="table-actions">
+            <button class="export-button">
+              <span class="button-icon">📊</span>
+              Exportar
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <mat-table [dataSource]="dataSource" matSort class="equipment-table">
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">🏷️</span>
+                  Nome
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">
+                <div class="cell-content">
+                  <strong>{{ eq.name }}</strong>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="model_name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">🔧</span>
+                  Modelo
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">{{ eq.model_name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="type_name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">⚙️</span>
+                  Tipo
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">
+                <span class="type-badge">{{ eq.type_name }}</span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="model_year">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">📅</span>
+                  Ano
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">
+                <span class="year-badge" [class.old-equipment]="isOldEquipment(eq.model_year)">
+                  {{ eq.model_year }}
+                </span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="serial_number">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">🔢</span>
+                  Série
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">
+                <code class="serial-code">{{ eq.serial_number }}</code>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="make_name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div class="header-content">
+                  <span class="header-icon">🏭</span>
+                  Marca
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let eq">
+                <div class="manufacturer-cell">
+                  <span class="manufacturer-logo" [class]="getManufacturerClass(eq.make_name)">
+                    {{ getManufacturerIcon(eq.make_name) }}
+                  </span>
+                  {{ eq.make_name }}
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" class="equipment-row"></mat-row>
+          </mat-table>
+
+          <mat-paginator 
+            [pageSizeOptions]="[5, 10, 20, 50]" 
+            [pageSize]="10"
+            showFirstLastButtons
+            class="equipment-paginator">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && dataSource.data.length === 0" class="empty-container">
+      <div class="empty-card">
+        <div class="empty-icon">📭</div>
+        <h3>Nenhum Equipamento Encontrado</h3>
+        <p *ngIf="filterTerm">Nenhum equipamento corresponde ao filtro "{{ filterTerm }}".</p>
+        <p *ngIf="!filterTerm">Não há equipamentos cadastrados no sistema.</p>
+        <button *ngIf="filterTerm" class="clear-filter-button" (click)="clearSearch()">
+          <span class="button-icon">🔄</span>
+          Limpar Filtro
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="equipments-footer">
+    <div class="footer-info">
+      <span>🔧 Total de equipamentos: {{ equipments.length }}</span>
+      <span>📊 Sistema Agro-telematics v1.0</span>
+    </div>
+  </footer>
+</div>

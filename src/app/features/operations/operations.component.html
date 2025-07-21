@@ -1,0 +1,167 @@
+<div class="operations-container">
+  <!-- Header -->
+  <header class="operations-header">
+    <img src="jd.png" alt="JD" />
+    <h1>Gestão de Operações</h1>
+    <img src="LargestGreenest.jpg" alt="Bracell" />
+  </header>
+
+  <!-- Navigation Button -->
+  <div class="navigation-section">
+    <button class="back-button" routerLink="/dashboard">
+      <span class="button-icon">🏠</span>
+      Voltar ao Dashboard
+    </button>
+  </div>
+
+  <!-- Stats Summary -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ operations.length }}</div>
+        <div class="stat-label">Total de Operações</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔄</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getActiveOperations() }}</div>
+        <div class="stat-label">Operações Ativas</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getCompletedOperations() }}</div>
+        <div class="stat-label">Concluídas</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌱</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getUniqueTypes() }}</div>
+        <div class="stat-label">Tipos de Operação</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-card">
+      <div class="loading-spinner">🔄</div>
+      <h3>Carregando Operações...</h3>
+      <p>Buscando dados das operações no sistema...</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container">
+    <div class="error-card">
+      <div class="error-icon">⚠️</div>
+      <h3>Erro ao Carregar Dados</h3>
+      <p>{{ error }}</p>
+      <button class="retry-button" (click)="ngOnInit()">
+        <span class="button-icon">🔄</span>
+        Tentar Novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error" class="content-section">
+    <!-- Operations List -->
+    <div class="operations-section">
+      <div class="operations-card">
+        <div class="operations-header-title">
+          <h3>📋 Lista de Operações</h3>
+          <div class="operations-actions">
+            <button class="export-button">
+              <span class="button-icon">📊</span>
+              Exportar
+            </button>
+          </div>
+        </div>
+        
+        <div class="operations-grid" *ngIf="operations.length > 0">
+          <div class="operation-card" *ngFor="let op of operations">
+            <div class="operation-header">
+              <div class="operation-type">
+                <span class="type-icon">{{ getOperationIcon(op.operation_type) }}</span>
+                {{ op.operation_type || 'Sem tipo' }}
+              </div>
+              <div class="operation-status" [class]="getOperationStatusClass(op)">
+                {{ getOperationStatus(op) }}
+              </div>
+            </div>
+            
+            <div class="operation-content">
+              <div class="operation-info">
+                <div class="info-item">
+                  <span class="info-icon">🕒</span>
+                  <div class="info-content">
+                    <span class="info-label">Início:</span>
+                    <span class="info-value">{{ op.start_date ? (op.start_date | date:'dd/MM/yyyy HH:mm') : '-' }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-icon">🏁</span>
+                  <div class="info-content">
+                    <span class="info-label">Fim:</span>
+                    <span class="info-value">{{ op.end_date ? (op.end_date | date:'dd/MM/yyyy HH:mm') : '-' }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-icon">🌾</span>
+                  <div class="info-content">
+                    <span class="info-label">Fazenda:</span>
+                    <span class="info-value">{{ op.plots?.farm_id || '-' }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-icon">🌱</span>
+                  <div class="info-content">
+                    <span class="info-label">Talhão:</span>
+                    <span class="info-value">{{ op.plots?.name || 'Sem talhão' }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="operation-footer">
+                <span class="operation-id">ID: {{ op.id }}</span>
+                <div class="operation-actions">
+                  <button class="action-btn view-btn" title="Visualizar">👁️</button>
+                  <button class="action-btn edit-btn" title="Editar">✏️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && operations.length === 0" class="empty-container">
+      <div class="empty-card">
+        <div class="empty-icon">📭</div>
+        <h3>Nenhuma Operação Encontrada</h3>
+        <p>Não há operações cadastradas no sistema.</p>
+        <button class="add-operation-button">
+          <span class="button-icon">➕</span>
+          Adicionar Nova Operação
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="operations-footer">
+    <div class="footer-info">
+      <span>⚡ Total de operações: {{ operations.length }}</span>
+      <span>📊 Sistema Agro-telematics v1.0</span>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,206 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <img src="jd.png" alt="JD" />
+    <h1>Painel de funções do Software</h1>
+    <img src="LargestGreenest.jpg" alt="Bracell" />
+  </header>
+
+  <!-- Estatísticas em Tempo Real -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">🚜</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ formatNumber(stats.totalEquipments) }}</div>
+        <div class="stat-label">Equipamentos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.activeOperations }}</div>
+        <div class="stat-label">Operações Ativas</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📈</div>
+      <div class="stat-content">
+        <div class="stat-value" [style.color]="getEfficiencyColor()">{{ stats.efficiencyRate }}%</div>
+        <div class="stat-label">Eficiência</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌱</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ formatNumber(stats.totalArea) }} ha</div>
+        <div class="stat-label">Área Total</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de busca de clima -->
+  <div class="weather-search-bar" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+    <button [class.active]="searchMode === 'city'" (click)="switchSearchMode('city')">Buscar por Cidade</button>
+    <button [class.active]="searchMode === 'coords'" (click)="switchSearchMode('coords')">Buscar por Coordenadas</button>
+    <ng-container *ngIf="searchMode === 'city'">
+      <input
+        type="text"
+        placeholder="Digite a cidade (ex: São Paulo,BR)"
+        [(ngModel)]="selectedCity"
+        (input)="onCitySearchChange($event)"
+        (keyup.enter)="manualUpdateWeather()"
+        (blur)="onCitySearchChange($event)"
+        [disabled]="isLoadingWeather"
+        style="margin-left: 8px; width: 220px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+      />
+      <button 
+        (click)="manualUpdateWeather()" 
+        [disabled]="isLoadingWeather || selectedCity.trim().length < 3"
+        class="search-button"
+        title="Buscar clima">
+        🔍
+      </button>
+    </ng-container>
+    <ng-container *ngIf="searchMode === 'coords'">
+      <input
+        type="number"
+        step="any"
+        min="-90"
+        max="90"
+        placeholder="Latitude (ex: -22.5404)"
+        [(ngModel)]="latitude"
+        (input)="onCoordsChange($event, 'lat')"
+        (blur)="onCoordsChange($event, 'lat')"
+        [disabled]="isLoadingWeather"
+        style="margin-left: 8px; width: 120px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+      />
+      <input
+        type="number"
+        step="any"
+        min="-180"
+        max="180"
+        placeholder="Longitude (ex: -48.9745)"
+        [(ngModel)]="longitude"
+        (input)="onCoordsChange($event, 'lon')"
+        (blur)="onCoordsChange($event, 'lon')"
+        [disabled]="isLoadingWeather"
+        style="margin-left: 8px; width: 120px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+      />
+      <button 
+        (click)="manualUpdateWeather()" 
+        [disabled]="isLoadingWeather || !latitude || !longitude"
+        class="search-button"
+        title="Buscar clima">
+        🔍
+      </button>
+    </ng-container>
+    <div *ngIf="isTyping && !isLoadingWeather" class="typing-indicator">✏️ Digite pelo menos 3 caracteres...</div>
+    <div *ngIf="isLoadingWeather" class="loading-indicator">🔄 Carregando...</div>
+  </div>
+  
+  <!-- Mensagem de erro -->
+  <div *ngIf="weatherError" class="weather-error">
+    ⚠️ {{ weatherError }}
+  </div>
+
+  <!-- Dados em Tempo Real -->
+  <div class="realtime-container">
+    <div class="realtime-card">
+      <h3>🌡️ Condições Climáticas</h3>
+      <div class="realtime-data">
+        <div class="data-item">
+          <span class="data-label">Temperatura:</span>
+          <span class="data-value">{{ realTimeData.temperature.toFixed(1) }}°C</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Umidade:</span>
+          <span class="data-value">{{ realTimeData.humidity.toFixed(0) }}%</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Vento:</span>
+          <span class="data-value">{{ realTimeData.windSpeed.toFixed(1) }} km/h</span>
+        </div>
+      </div>
+      <!-- 👇 CIDADE e COORDENADAS CLICÁVEIS -->
+      <div class="location-data">
+        <span class="data-label">Localização:</span>
+        <a 
+          class="clickable-location"
+          [href]="'https://www.google.com/maps/search/?api=1&query=' + latitude + ',' + longitude"
+          target="_blank"
+        >
+          📍 {{ selectedCity || 'Coordenadas' }} ({{ latitude }}, {{ longitude }})
+        </a>
+      </div>
+      <div class="update-time">
+        Última atualização: {{ realTimeData.currentTime.toLocaleTimeString('pt-BR') }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificações -->
+  <div class="notifications-container">
+    <h3>🔔 Notificações Recentes</h3>
+    <div class="notifications-list">
+      <div class="notification-item" *ngFor="let notification of notifications">
+        <div class="notification-icon">{{ notification.icon }}</div>
+        <div class="notification-content">
+          <div class="notification-message">{{ notification.message }}</div>
+          <div class="notification-time">{{ notification.time }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Principais -->
+  <div class="card-grid">
+    <div class="card" *ngFor="let card of cards; let i = index">
+      <div class="card-header">
+        <span class="card-icon">{{ card.icon }}</span>
+        {{ card.header }}
+        <img class="bracell-stamp" src="logoBracell5.png" alt="Bracell" />
+      </div>
+      <img [src]="card.image" alt="card image" class="card-img" />
+      <div class="card-body">
+        <h4>{{ card.title }}</h4>
+        <p>{{ card.description }}</p>
+        
+        <!-- Estatísticas do Card -->
+        <div class="card-stats" *ngIf="card.stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ card.stats.total }}</span>
+            <span class="stat-text">Total</span>
+          </div>
+          <div class="stat-item" *ngIf="card.stats.active">
+            <span class="stat-number">{{ card.stats.active }}</span>
+            <span class="stat-text">Ativos</span>
+          </div>
+          <div class="stat-item" *ngIf="card.stats.completed">
+            <span class="stat-number">{{ card.stats.completed }}</span>
+            <span class="stat-text">Concluídos</span>
+          </div>
+        </div>
+        
+        <ng-container *ngIf="i !== 2">
+          <button (click)="navigateTo(card.route)" class="action-button">
+            <span class="button-icon">🚀</span>
+            Acessar Módulo
+          </button>
+        </ng-container>
+        <ng-container *ngIf="i === 2">
+          <button (click)="navigateTo(card.route)" class="action-button">
+            <span class="button-icon">🚀</span>
+            Acessar Módulo
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer com Informações -->
+  <footer class="dashboard-footer">
+    <div class="footer-info">
+      <span>�� Última atualização: {{ stats.lastUpdate.toLocaleString('pt-BR') }}</span>
+      <span>📊 Sistema Agro-telematics v1.0</span>
+    </div>
+  </footer>
+</div>

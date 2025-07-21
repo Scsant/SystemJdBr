@@ -1,0 +1,88 @@
+<div class="download-zip-container">
+  <div class="download-card">
+    <div class="card-header">
+      <div class="header-icon">📂</div>
+      <h3>Linhas Disponíveis</h3>
+      <p>Baixe os arquivos ZIP das linhas de produção</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+      <div class="loading-spinner">🔄</div>
+      <span>Carregando arquivos...</span>
+    </div>
+
+    <!-- Files List -->
+    <div *ngIf="!loading && zipFiles.length > 0" class="files-section">
+      <!-- Selection Controls -->
+      <div class="selection-controls">
+        <div class="select-all-section">
+          <label class="checkbox-container">
+            <input 
+              type="checkbox" 
+              [checked]="selectAll" 
+              (change)="toggleSelectAll()"
+              class="select-all-checkbox"
+            >
+            <span class="checkmark"></span>
+            <span class="checkbox-label">
+              {{ selectAll ? 'Desmarcar Todos' : 'Selecionar Todos' }}
+            </span>
+          </label>
+        </div>
+        
+        <div class="selection-info" *ngIf="getSelectedCount() > 0">
+          <span class="selected-count">{{ getSelectedCount() }} de {{ zipFiles.length }} selecionado(s)</span>
+        </div>
+      </div>
+
+      <!-- Bulk Actions -->
+      <div class="bulk-actions" *ngIf="getSelectedCount() > 0">
+        <button class="download-selected-btn" (click)="downloadSelected()">
+          <span class="btn-icon">⬇️</span>
+          Baixar Selecionados ({{ getSelectedCount() }})
+        </button>
+        <button class="clear-selection-btn" (click)="clearSelection()">
+          <span class="btn-icon">❌</span>
+          Limpar Seleção
+        </button>
+      </div>
+
+      <!-- Files List -->
+      <div class="files-list">
+        <div class="file-item" *ngFor="let file of zipFiles">
+          <div class="file-selection">
+            <label class="checkbox-container">
+              <input 
+                type="checkbox" 
+                [checked]="isFileSelected(file)" 
+                (change)="toggleFileSelection(file)"
+                class="file-checkbox"
+              >
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          
+          <div class="file-info">
+            <span class="file-icon">📁</span>
+            <span class="file-name">{{ file }}</span>
+          </div>
+          
+          <div class="file-actions">
+            <button class="download-btn" (click)="download(file)" title="Baixar arquivo individual">
+              <span class="btn-icon">⬇️</span>
+              Baixar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && zipFiles.length === 0" class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h4>Nenhum arquivo encontrado</h4>
+      <p>Não há arquivos ZIP disponíveis no bucket <strong>linhas</strong>.</p>
+    </div>
+  </div>
+</div>
