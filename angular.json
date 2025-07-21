@@ -29,7 +29,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/test.html"
             ],
             "styles": [
               "src/styles.scss"
