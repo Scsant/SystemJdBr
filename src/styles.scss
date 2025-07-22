@@ -33,6 +33,7 @@ app-root {
 // Forçar estilos dos componentes principais
 .dashboard-container,
 .operations-container,
+.equipments-container,
 .equipment-list-container {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%) !important;
   color: white !important;
@@ -78,6 +79,7 @@ app-root {
 // Headers
 .dashboard-header,
 .operations-header,
+.equipments-header,
 .equipment-header {
   background: rgba(34, 34, 34, 0.8) !important;
   backdrop-filter: blur(10px) !important;
@@ -109,6 +111,89 @@ app-root {
     &:hover {
       filter: brightness(1.3) !important;
     }
+  }
+}
+
+// ===== FORÇAR ESTILOS ESPECÍFICOS PARA OPERAÇÕES E EQUIPAMENTOS =====
+
+// Operações
+.operations-container {
+  padding: 2rem !important;
+  font-family: 'Inter', sans-serif !important;
+  overflow: hidden !important;
+}
+
+.operations-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+  gap: 2rem !important;
+  margin-bottom: 2rem !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.operation-card {
+  background: rgba(34, 34, 34, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 15px !important;
+  padding: 2rem !important;
+  position: relative !important;
+  z-index: 10 !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+// Equipamentos  
+.equipments-container {
+  padding: 2rem !important;
+  font-family: 'Inter', sans-serif !important;
+  overflow: hidden !important;
+}
+
+.equipment-table,
+.mat-table {
+  background: rgba(34, 34, 34, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 15px !important;
+  color: white !important;
+}
+
+.mat-header-cell,
+.mat-cell {
+  color: white !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.mat-row:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+// Botões de navegação
+.back-button,
+.navigation-section button {
+  background: rgba(34, 34, 34, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  padding: 0.8rem 1.5rem !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  text-decoration: none !important;
+
+  &:hover {
+    background: rgba(44, 44, 44, 0.9) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
   }
 }
 
