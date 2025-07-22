@@ -9,18 +9,108 @@
 
 html, body {
   height: 100%;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
 body {
-  margin: 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%);
-  color: white;
+  margin: 0 !important;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%) !important;
+  color: white !important;
   overflow-x: hidden;
+  min-height: 100vh !important;
+}
+
+// Garantir que app-root ocupe toda a tela
+app-root {
+  display: block !important;
+  min-height: 100vh !important;
+  width: 100% !important;
 }
 
 // Importar fontes do Google
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// Forçar estilos dos componentes principais
+.dashboard-container,
+.operations-container,
+.equipment-list-container {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%) !important;
+  color: white !important;
+  min-height: 100vh !important;
+  position: relative !important;
+  
+  &::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%) !important;
+    animation: backgroundShift 20s ease-in-out infinite !important;
+    z-index: -1 !important;
+  }
+}
+
+@keyframes backgroundShift {
+  0%, 100% { opacity: 0.5 !important; }
+  50% { opacity: 1 !important; }
+}
+
+// Forçar estilos dos cards globalmente
+.stat-card,
+.operation-card,
+.equipment-card,
+.main-card {
+  background: rgba(34, 34, 34, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 15px !important;
+  padding: 1.5rem !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+// Headers
+.dashboard-header,
+.operations-header,
+.equipment-header {
+  background: rgba(34, 34, 34, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 15px !important;
+  padding: 1.5rem 2rem !important;
+  margin-bottom: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  
+  h1 {
+    color: white !important;
+    margin: 0 !important;
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    flex: 1 !important;
+    background: linear-gradient(45deg, #ffffff, #e0e0e0) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  
+  img {
+    height: 40px !important;
+    transition: filter 0.3s ease !important;
+    
+    &:hover {
+      filter: brightness(1.3) !important;
+    }
+  }
+}
 
 // Configurações globais para Angular Material (se usado)
 .mat-elevation-z4 {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Operation } from 'src/app/core/models/operation.model';
 import { SupabaseService } from 'src/app/core/services/supabase.service';
 
@@ -6,7 +6,8 @@ import { SupabaseService } from 'src/app/core/services/supabase.service';
   selector: 'app-operations',
   standalone: false,
   templateUrl: './operations.component.html',
-  styleUrl: './operations.component.scss'
+  styleUrl: './operations.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class OperationsComponent implements OnInit {
   operations: Operation[] = [];

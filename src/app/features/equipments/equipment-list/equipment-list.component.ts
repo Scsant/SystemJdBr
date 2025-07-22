@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { SupabaseService } from 'src/app/core/services/supabase.service';
 import { Equipment } from 'src/app/core/models/equipment.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,8 @@ import { MatSort } from '@angular/material/sort';
   standalone: false,
   selector: 'app-equipment-list',
   templateUrl: './equipment-list.component.html',
-  styleUrls: ['./equipment-list.component.scss']
+  styleUrls: ['./equipment-list.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class EquipmentListComponent implements OnInit {
   equipments: Equipment[] = [];
