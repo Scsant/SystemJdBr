@@ -1,0 +1,119 @@
+/* RESET E EMERGÊNCIA TOTAL */
+
+/* Reset completo */
+* {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Body forçado */
+html, body {
+  background: #1a1a1a !important;
+  color: white !important;
+  font-family: 'Inter', Arial, sans-serif !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* App root */
+app-root {
+  display: block !important;
+  background: #1a1a1a !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+}
+
+/* TODOS OS CONTAINERS */
+.dashboard-container,
+.operations-container,
+.equipments-container,
+div[class*="container"] {
+  background: #1a1a1a !important;
+  color: white !important;
+  min-height: 100vh !important;
+  padding: 20px !important;
+  width: 100% !important;
+}
+
+/* TODOS OS HEADERS */
+.dashboard-header,
+.operations-header,
+.equipments-header,
+header[class*="header"] {
+  background: #333 !important;
+  color: white !important;
+  padding: 20px !important;
+  border-radius: 10px !important;
+  margin-bottom: 20px !important;
+  border: 1px solid #555 !important;
+}
+
+/* TODOS OS CARDS */
+.stat-card,
+.operation-card,
+.main-card,
+div[class*="card"] {
+  background: #333 !important;
+  color: white !important;
+  padding: 20px !important;
+  border-radius: 10px !important;
+  margin: 10px !important;
+  border: 1px solid #555 !important;
+}
+
+/* TABELAS */
+.mat-table,
+.equipment-table,
+table {
+  background: #333 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
+  border-radius: 10px !important;
+}
+
+.mat-header-cell,
+.mat-cell,
+th, td {
+  color: white !important;
+  background: #333 !important;
+  border-bottom: 1px solid #555 !important;
+}
+
+.mat-row:hover,
+tr:hover {
+  background: #444 !important;
+}
+
+/* BOTÕES */
+button {
+  background: #555 !important;
+  color: white !important;
+  border: 1px solid #777 !important;
+  padding: 10px 20px !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
+
+button:hover {
+  background: #666 !important;
+}
+
+/* INPUTS */
+input {
+  background: #333 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
+  padding: 10px !important;
+  border-radius: 5px !important;
+}
+
+/* H1, H2, etc */
+h1, h2, h3, h4, h5, h6 {
+  color: white !important;
+}
+
+/* Forçar tudo que tem texto */
+p, span, div, label {
+  color: white !important;
+}

@@ -6,6 +6,96 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="bracellazul3.svg">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- CSS de emergência inline -->
+  <style>
+    /* CSS DE EMERGÊNCIA - FORÇAR ESTILOS */
+    * {
+      box-sizing: border-box !important;
+    }
+    
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%) !important;
+      color: white !important;
+      font-family: 'Inter', sans-serif !important;
+      min-height: 100vh !important;
+    }
+    
+    app-root {
+      display: block !important;
+      min-height: 100vh !important;
+      width: 100% !important;
+    }
+    
+    .dashboard-container,
+    .operations-container,
+    .equipments-container {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #404040 50%, #2d2d2d 75%, #1a1a1a 100%) !important;
+      color: white !important;
+      min-height: 100vh !important;
+      padding: 2rem !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    
+    .dashboard-container::before,
+    .operations-container::before,
+    .equipments-container::before {
+      content: '' !important;
+      position: absolute !important;
+      inset: 0 !important;
+      background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%) !important;
+      animation: backgroundShift 20s ease-in-out infinite !important;
+      z-index: -1 !important;
+    }
+    
+    @keyframes backgroundShift {
+      0%, 100% { opacity: 0.5 !important; }
+      50% { opacity: 1 !important; }
+    }
+    
+    .stat-card,
+    .operation-card,
+    .main-card,
+    .dashboard-header,
+    .operations-header,
+    .equipments-header {
+      background: rgba(34, 34, 34, 0.8) !important;
+      backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 15px !important;
+      color: white !important;
+      padding: 1.5rem !important;
+      position: relative !important;
+      z-index: 10 !important;
+    }
+    
+    .mat-table,
+    .equipment-table {
+      background: rgba(34, 34, 34, 0.8) !important;
+      backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 15px !important;
+      color: white !important;
+    }
+    
+    .mat-header-cell,
+    .mat-cell {
+      color: white !important;
+      border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .mat-row:hover {
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>
