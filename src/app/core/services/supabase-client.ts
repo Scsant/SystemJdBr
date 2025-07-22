@@ -1,6 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 
-export const supabase = createClient(
-  'https://qktpnoekulrlporjoqqw.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrdHBub2VrdWxybHBvcmpvcXF3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTc1MzU2NSwiZXhwIjoyMDY3MzI5NTY1fQ.al9re5AAvitwKi2dUjH1DdqlTKCodUBt-kyD9RaSX1o'
-); 
+const supabaseUrl = 'https://qktpnoekulrlporjoqqw.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrdHBub2VrdWxybHBvcmpvcXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE3NTM1NjUsImV4cCI6MjA2NzMyOTU2NX0.1r8YH8p4lGnXhR6xwGZzhp7B1Z2FNqMwF-N-8BLKAQo';
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storage: window.localStorage,
+    storageKey: 'agro-telematics-auth-token'
+  },
+  global: {
+    headers: {
+      'x-application-name': 'agro-telematics-app'
+    }
+  }
+}); 
