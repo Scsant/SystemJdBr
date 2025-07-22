@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from '../../core/services/auth.service';
+import { MockAuthService, AuthState } from '../../core/services/mock-auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,14 +24,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: MockAuthService
   ) {}
 
   ngOnInit(): void {
     // Verificar se já está autenticado
     this.authService.getAuthState()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(authState => {
+      .subscribe((authState: AuthState) => {
         if (authState.session && !authState.loading) {
           this.router.navigate(['/dashboard']);
         }
