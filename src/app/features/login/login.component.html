@@ -9,9 +9,9 @@
   <div class="login-content">
     <div class="login-card">
       <div class="login-card-header">
-        <div class="login-icon">🔐</div>
-        <h2>Acesso ao Sistema</h2>
-        <p>Entre com suas credenciais para acessar o painel</p>
+        <div class="login-icon">{{ isRegistering ? '�' : '�🔐' }}</div>
+        <h2>{{ isRegistering ? 'Criar Nova Conta' : 'Acesso ao Sistema' }}</h2>
+        <p>{{ isRegistering ? 'Preencha os dados para criar uma nova conta' : 'Entre com suas credenciais para acessar o painel' }}</p>
       </div>
 
       <div class="login-form">
@@ -44,10 +44,31 @@
           </div>
         </div>
 
-        <button class="login-button" (click)="onLogin()">
-          <span class="button-icon"></span>
-          Entrar no Sistema
+        <button class="login-button" (click)="onLogin()" [disabled]="loading">
+          <span class="button-icon">{{ loading ? '⏳' : (isRegistering ? '📝' : '🔑') }}</span>
+          {{ loading ? 'Processando...' : (isRegistering ? 'Criar Conta' : 'Entrar no Sistema') }}
         </button>
+
+        <!-- Credenciais de Teste -->
+        <div class="test-credentials" *ngIf="showTestCredentials && !isRegistering">
+          <button type="button" class="test-button" (click)="useTestCredentials()">
+            🧪 Usar Credenciais de Teste
+          </button>
+          <small>Email: admin&#64;agro-telematics.com | Senha: admin123</small>
+        </div>
+
+        <!-- Toggle entre Login e Registro -->
+        <div class="toggle-mode">
+          <button type="button" class="toggle-button" (click)="toggleMode()">
+            {{ isRegistering ? '← Voltar ao Login' : '📝 Criar Nova Conta' }}
+          </button>
+        </div>
+
+        <!-- Mensagem de Erro -->
+        <div class="error-message" *ngIf="errorMessage">
+          <span class="error-icon">⚠️</span>
+          {{ errorMessage }}
+        </div>
       </div>
 
       <div class="login-footer">

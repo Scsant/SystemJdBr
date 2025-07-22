@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   password = '';
   loading = false;
   errorMessage = '';
+  showTestCredentials = true;
+  isRegistering = false;
   
   private destroy$ = new Subject<void>();
 
@@ -52,16 +54,33 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     try {
-      const result = await this.authService.signIn(this.email, this.password);
+      const result = this.isRegistering 
+        ? await this.authService.signUp(this.email, this.password)
+        : await this.authService.signIn(this.email, this.password);
       
       if (!result.success) {
-        this.errorMessage = result.error || 'Erro no login';
+        this.errorMessage = result.error || (this.isRegistering ? 'Erro no registro' : 'Erro no login');
+        this.loading = false;
+      } else if (this.isRegistering) {
+        this.errorMessage = '';
+        this.isRegistering = false;
+        alert('Conta criada com sucesso! Agora faça login.');
         this.loading = false;
       }
-      // Se sucesso, o redirecionamento será feito automaticamente pelo AuthService
+      // Se login com sucesso, o redirecionamento será feito automaticamente pelo AuthService
     } catch (error) {
       this.errorMessage = 'Erro inesperado. Tente novamente.';
       this.loading = false;
     }
+  }
+
+  useTestCredentials(): void {
+    this.email = 'admin@agro-telematics.com';
+    this.password = 'admin123';
+  }
+
+  toggleMode(): void {
+    this.isRegistering = !this.isRegistering;
+    this.errorMessage = '';
   }
 }
