@@ -7,9 +7,32 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true,
-    storage: window.localStorage,
-    storageKey: 'agro-telematics-auth-token'
+    detectSessionInUrl: false, // Desabilitar detecção de URL para evitar conflitos
+    storage: {
+      getItem: (key: string) => {
+        try {
+          return localStorage.getItem(`agro-app-${key}`);
+        } catch {
+          return null;
+        }
+      },
+      setItem: (key: string, value: string) => {
+        try {
+          localStorage.setItem(`agro-app-${key}`, value);
+        } catch {
+          // Silently fail if localStorage is not available
+        }
+      },
+      removeItem: (key: string) => {
+        try {
+          localStorage.removeItem(`agro-app-${key}`);
+        } catch {
+          // Silently fail if localStorage is not available
+        }
+      }
+    },
+    storageKey: 'session-v3', // Novo storage key para evitar conflitos
+    flowType: 'implicit' // Usar fluxo implícito para reduzir complexidade
   },
   global: {
     headers: {

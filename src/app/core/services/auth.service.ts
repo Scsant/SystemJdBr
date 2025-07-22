@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { supabase } from './supabase-client';
+import { supabase } from './supabase-simple'; // Usar cliente sem LockManager
 import { User, Session } from '@supabase/supabase-js';
 
 export interface AuthState {
@@ -23,7 +23,30 @@ export class AuthService {
   private initialized = false;
 
   constructor(private router: Router) {
+    // Limpar qualquer storage conflitante antes de inicializar
+    this.clearConflictingStorage();
     this.initializeAuth();
+  }
+
+  private clearConflictingStorage(): void {
+    try {
+      // Limpar todos os storages relacionados ao Supabase que podem causar conflito
+      const keysToRemove = [
+        'sb-qktpnoekulrlporjoqqw-auth-token',
+        'agro-telematics-auth-token',
+        'agro-app-auth-token',
+        'session-v3'
+      ];
+      
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+        localStorage.removeItem(`agro-app-${key}`);
+      });
+      
+      console.log('Conflicting storage cleared');
+    } catch (error) {
+      console.warn('Error clearing storage:', error);
+    }
   }
 
   private async initializeAuth(): Promise<void> {
